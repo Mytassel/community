@@ -52,7 +52,7 @@
         </dependency>
 
         <!--
-            fastjson :  对象转json
+            fastjson :  json
         -->
         <dependency>
             <groupId>com.alibaba</groupId>
