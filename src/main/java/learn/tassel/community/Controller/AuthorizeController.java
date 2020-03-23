@@ -24,7 +24,8 @@ public class AuthorizeController {
     @Autowired
     private GitHubProvider gitHubProvider;
 
-    @Autowired
+    //忽略当前要注入的bean
+    @Autowired(required=false)
     private UserMapper userMapper;
 
     //装配配置文件内容值
@@ -52,7 +53,7 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
         //得到方法返回值 ctrl+ alt + v
         String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
-        System.out.println(accessToken);
+        //System.out.println(accessToken);
         //access_token=3186b52e8aa93ad31f6a5389ecc9db47522b295d&scope=user&token_type=bearer
 
         //获取token; access_token
@@ -60,7 +61,7 @@ public class AuthorizeController {
         GitHubUser gitHubUser = gitHubProvider.getGitHubUser(access_token);
 
         //手写session
-        if(gitHubUser != null){
+        if(gitHubUser != null && gitHubUser.getName() != null){
             //存入数据库中
             User user = new User();
             user.setName(gitHubUser.getName());

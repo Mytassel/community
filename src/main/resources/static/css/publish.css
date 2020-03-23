@@ -2,9 +2,11 @@ body{
     background-color: #efefef;
 }
 .main{
-    margin: 15px;
+    margin: 20px;
+    background-color: white;
 }
 
 .publish_btn{
     margin-bottom: 15px;
+    float: right;
 }

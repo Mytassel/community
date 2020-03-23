@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class IndexController {
 
-    @Autowired
+    @Autowired(required=false)
     private UserMapper userMapper;
 
     //初始路径
@@ -24,7 +24,6 @@ public class IndexController {
         Cookie[] cookies = request.getCookies();
         for (int len=cookies.length,i=0;i<len; i++) {
             Cookie cookie = cookies[i];
-
             if(cookie.getName().equals("token")){
                 String token = cookie.getValue();
                 User user = userMapper.findUserInfo(token);
