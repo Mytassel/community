@@ -2,6 +2,8 @@ package learn.tassel.community.Controller;
 
 import learn.tassel.community.Dto.AccessTokenDTO;
 import learn.tassel.community.Dto.GitHubUser;
+import learn.tassel.community.Mapper.UserMapper;
+import learn.tassel.community.Model.User;
 import learn.tassel.community.provider.GitHubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 @Controller
 //Controller 路由Api的承载者
@@ -18,6 +21,9 @@ public class AuthorizeController {
     //装配类
     @Autowired
     private GitHubProvider gitHubProvider;
+
+    @Autowired
+    private UserMapper userMapper;
 
     //装配配置文件内容值
     @Value("${github.client.id}")
@@ -29,7 +35,8 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String RedirectUri;
 
-//    用于接受github账号登陆验证
+
+    //    用于接受github账号登陆验证
     @GetMapping("/callback")
     public String callBack(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state, HttpServletRequest request){
 
@@ -47,11 +54,19 @@ public class AuthorizeController {
 
         //获取token; access_token
         String access_token = accessToken.split("&")[0].split("=")[1];
-        GitHubUser user = gitHubProvider.getGitHubUser(access_token);
+        GitHubUser gitHubUser = gitHubProvider.getGitHubUser(access_token);
 
         //手写session
-        if(user != null){
-            request.getSession().setAttribute("user",user);
+        if(gitHubUser != null){
+            //存入数据库中
+            User user = new User();
+            user.setName(gitHubUser.getName());
+            user.setAccount_id(String.valueOf(gitHubUser.getId()));
+            user.setToken(UUID.randomUUID().toString());
+            user.setGmtCreat(System.currentTimeMillis());
+            user.setGmtModifity(user.getGmtCreat());
+            userMapper.insertUserInfo(user);
+            request.getSession().setAttribute("user",gitHubUser);
             return "redirect:/";
         }else{
             return "redirect:/";

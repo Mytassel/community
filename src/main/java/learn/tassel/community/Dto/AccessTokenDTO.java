@@ -2,6 +2,9 @@ package learn.tassel.community.Dto;
 
 /**
  * Alt + Ins 组合键生产get + set
+ *
+ * DTO 是关联服务的实体
+ *
  */
 
 public class AccessTokenDTO {
