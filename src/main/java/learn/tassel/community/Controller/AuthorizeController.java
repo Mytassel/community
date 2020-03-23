@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
 @Controller
@@ -38,7 +40,8 @@ public class AuthorizeController {
 
     //    用于接受github账号登陆验证
     @GetMapping("/callback")
-    public String callBack(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state, HttpServletRequest request){
+    public String callBack(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state,
+                           HttpServletRequest request, HttpServletResponse response){
 
         //引入jar 或依赖 alt+回车
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
@@ -66,7 +69,9 @@ public class AuthorizeController {
             user.setGmtCreat(System.currentTimeMillis());
             user.setGmtModifity(user.getGmtCreat());
             userMapper.insertUserInfo(user);
-            request.getSession().setAttribute("user",gitHubUser);
+            //页面写入Cookies request.getSession().setAttribute("user",gitHubUser);
+            response.addCookie(new Cookie("token",user.getToken()));
+
             return "redirect:/";
         }else{
             return "redirect:/";
