@@ -54,6 +54,8 @@ public class PublishController {
         //获取用户id
         User user = null;
         Cookie[] cookies = request.getCookies();
+
+        if(cookies != null && cookies.length !=0)
         for (int len=cookies.length,i=0;i<len; i++) {
             Cookie cookie = cookies[i];
             if(cookie.getName().equals("token")){

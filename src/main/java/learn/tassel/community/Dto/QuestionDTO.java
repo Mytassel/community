@@ -1,9 +1,10 @@
-package learn.tassel.community.Model;
+package learn.tassel.community.Dto;
 
+import learn.tassel.community.Model.User;
 import lombok.Data;
 
 @Data
-public class Question {
+public class QuestionDTO {
     private Integer id;//发布信息id
     private String title;
     private String description;
@@ -14,4 +15,5 @@ public class Question {
     private Integer viewCount;
     private Integer likeCount;
     private String tag;
+    private User user;
 }
