@@ -4,6 +4,7 @@ import learn.tassel.community.Dto.AccessTokenDTO;
 import learn.tassel.community.Dto.GitHubUser;
 import learn.tassel.community.Mapper.UserMapper;
 import learn.tassel.community.Model.User;
+import learn.tassel.community.Service.UserService;
 import learn.tassel.community.provider.GitHubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,9 @@ public class AuthorizeController {
     @Autowired(required=false)
     private UserMapper userMapper;
 
+    @Autowired
+    private UserService userService;
+
     //装配配置文件内容值
     @Value("${github.client.id}")
     private String ClientID;
@@ -38,12 +42,23 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String RedirectUri;
 
+    @GetMapping("/loginOut")
+    public String loginOut(HttpServletRequest request,
+                           HttpServletResponse response){
+        //清除Session
+        request.getSession().removeAttribute("user");
+        //将Cookie过期
+        Cookie cookie = new Cookie("token",null);
+        response.addCookie(cookie);
+        cookie.setMaxAge(0);
+        return "redirect:/";
+    }
 
-    //    用于接受github账号登陆验证
+    //用于接受github账号登陆验证
     @GetMapping("/callback")
-    public String callBack(@RequestParam(name = "code") String code, @RequestParam(name = "state") String state,
-                           HttpServletRequest request, HttpServletResponse response){
-
+    public String callBack(@RequestParam(name = "code") String code,
+                           @RequestParam(name = "state") String state,
+                           HttpServletResponse response){
         //引入jar 或依赖 alt+回车
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(ClientID);
@@ -55,7 +70,6 @@ public class AuthorizeController {
         String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
         //System.out.println(accessToken);
         //access_token=3186b52e8aa93ad31f6a5389ecc9db47522b295d&scope=user&token_type=bearer
-
         //获取token; access_token
         String access_token = accessToken.split("&")[0].split("=")[1];
         GitHubUser gitHubUser = gitHubProvider.getGitHubUser(access_token);
@@ -70,7 +84,9 @@ public class AuthorizeController {
             user.setGmtCreat(System.currentTimeMillis());
             user.setGmtModifity(user.getGmtCreat());
             user.setAvaterUrl(gitHubUser.getAvatar_url());
-            userMapper.insertUserInfo(user);
+            //验证当前用户是否注册过
+            userService.createOrUpdateUserInfo(user);
+            //userMapper.insertUserInfo(user);
             //页面写入Cookies request.getSession().setAttribute("user",gitHubUser);
             response.addCookie(new Cookie("token",user.getToken()));
 

@@ -7,34 +7,35 @@
     <!--
         前端样式: bootstrap 3.3.7
     -->
-    <link rel="stylesheet" href="bootstrap-3.3.7/css/bootstrap.css">
-    <link rel="stylesheet" href="bootstrap-3.3.7/css/bootstrap-theme.css">
-    <link rel="stylesheet" href="css/publish.css">
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.css">
+    <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/css/publish.css">
 
 </head>
 <body>
-    <!--
-        index 头部样式
-    -->
+<!--
+    index 头部样式
+-->
 
-    <!--
-        引入navigation 内部是公共的页面
-    -->
+<!--
+    引入navigation 内部是公共的页面
+-->
 
-    <div th:insert="~{navigation :: nav}">
-    </div>
+<div th:insert="~{navigation :: nav}">
+</div>
 
-    <div class="container-fluid main">
-        <div class="row">
+<div class="container-fluid main profile">
+    <div class="row">
+        <!--
+            左侧栏 占四分之三
+        -->
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3><span th:text="${selectTagName}"></span></h3>
+            <hr>
             <!--
-                左侧栏 占四分之三
+                显示我的问题
             -->
-            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-                <h3><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h3>
-                <hr>
-                <!--
-                    现实列表内容
-                -->
+            <div th:if="${selectTag} eq 'problem'">
                 <div class="media" th:each="question : ${PageQuestion.question}">
                     <div class="media-left">
                         <a href="#">
@@ -42,77 +43,79 @@
                         </a>
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">
-                            <a th:href="@{'/question/'+${question.getId()}}" th:text="${question.title}">
-                            </a>
-                        </h4>
+                        <h4 class="media-heading" th:text="${question.title}"></h4>
                         <span th:text="${question.description}"></span><br/>
                         • <span class="text-style" th:text="${question.commentCount}"></span> 个评论
                         • <span class="text-style" th:text="${question.viewCount}"></span> 次浏览
                         • <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
                     </div>
                 </div>
+
                 <!--
                     分页
+
+                    url 拼接 @{'/details/'+${user.login}(orderId=${o.id})}
                 -->
                 <nav aria-label="Page navigation" th:if="${PageQuestion.totalPage != 0}">
                     <ul class="pagination">
                         <li th:if="${PageQuestion.firstPage} eq true">
-                            <a href="/?page=1" aria-label="Previous">
+                            <a href="/profile/problem?page=1" aria-label="Previous">
                                 <span aria-hidden="true">&lt;&lt;</span>
                             </a>
                         </li>
                         <li th:if="${PageQuestion.previousPage} eq true">
-                            <a th:href="@{/(page=${PageQuestion.currPage}-1)}" aria-label="Previous">
+                            <a th:href="@{'/profile/'+${selectTag}(page=${PageQuestion.currPage}-1)}" aria-label="Previous">
                                 <span aria-hidden="true">&lt;</span>
                             </a>
                         </li>
-                        <!--private Boolean FirstPage;//回到第一页-->
-                        <!--private Boolean EndPage;//回到最后一页-->
-                        <!--private Boolean nextPage;//下一页-->
-                        <!--private Boolean PreviousPage;// 上一页-->
-                        <!--private Integer currPage;//当前页，高亮显示-->
-
                         <li th:each="page:${PageQuestion.pages}" th:class="${PageQuestion.currPage} eq ${page} ? 'active':''">
-                            <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+                            <a th:href="@{'/profile/'+${selectTag}(page=${page})}" th:text="${page}"></a>
                         </li>
-
                         <li th:if="${PageQuestion.nextPage} eq true">
-                            <a th:href="@{/(page=${PageQuestion.currPage}+1)}" aria-label="Next">
+                            <a th:href="@{'/profile/'+${selectTag}(page=${PageQuestion.currPage}+1)}" aria-label="Next">
                                 <span aria-hidden="true">&gt;</span>
                             </a>
                         </li>
                         <li th:if="${PageQuestion.endPage} eq true">
-                            <a th:href="@{/(page=${PageQuestion.totalPage})}" aria-label="Previous">
+                            <a th:href="@{'/profile/'+${selectTag}(page=${PageQuestion.totalPage})}" aria-label="Previous">
                                 <span aria-hidden="true">&gt;&gt;</span>
                             </a>
                         </li>
                     </ul>
                 </nav>
-
-            </div>
-            <!--
-                右侧栏 占四分之一
-            -->
-            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-                <h3>热门话题</h3>
             </div>
 
         </div>
+        <!--
+            右侧栏 占四分之一
+        -->
+        <!--
+            我的问题
+            我的回复
+        -->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12 right-tag">
+            <!--
+                列表组
+            -->
+            <div class="list-group">
+                <a href="/profile/problem" class="list-group-item" th:classappend="${selectTagName == '我的问题'} ? 'active' : ''">
+                    我的问题
+                </a>
+
+                <a href="/profile/reply"  class="list-group-item" th:classappend="${selectTagName == '我的回复'} ? 'active' : ''">
+                    我的回复
+                    <span class="badge">14</span>
+                </a>
+            </div>
+        </div>
+
     </div>
+</div>
 
 </body>
-    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
-    <!--
-        bootstrap js文件
-    -->
-    <script src="bootstrap-3.3.7/js/bootstrap.js"></script>
-    
-    <script>
-        
-        // function longinRegist() {
-        //
-        // }
-        
-    </script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
+<!--
+    bootstrap js文件
+-->
+<script src="/bootstrap-3.3.7/js/bootstrap.js"></script>
 </html>

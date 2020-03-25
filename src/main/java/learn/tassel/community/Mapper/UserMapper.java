@@ -24,4 +24,10 @@ public interface UserMapper {
 
     @Select("select * from user where id = #{id}")
     User find2IdUserInfo(@Param("id") Integer id);
+
+    @Select("select count(1) from user where account_id = #{account_id}")
+    Integer volidateUser(@Param("account_id") String account_id);
+
+    @Select("update user set name=#{name},token=#{token},gmt_modified=#{gmtModifity},avater_url=#{avaterUrl} where account_id =#{account_id} ")
+    void updateUserInfo(User user);
 }

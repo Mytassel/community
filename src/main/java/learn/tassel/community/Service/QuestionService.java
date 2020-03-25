@@ -26,13 +26,11 @@ public class QuestionService {
     public PageQuestionDTO list(Integer page, Integer size){
 
         PageQuestionDTO pageQuestionDTO = new PageQuestionDTO();
-
         List<QuestionDTO> QuestionList = new ArrayList<QuestionDTO>();
 
         Integer offset = (page-1)*size;
 
         Integer countNum = questionMapper.count();
-
         List<Question> list = questionMapper.list(offset,size);
         if(list.size()>0)
             for (Question question:list) {
@@ -48,4 +46,48 @@ public class QuestionService {
         return pageQuestionDTO;
     }
 
+    public PageQuestionDTO list2UserId(Integer userID, Integer page, Integer size) {
+        PageQuestionDTO pageQuestionDTO = new PageQuestionDTO();
+        List<QuestionDTO> QuestionList = new ArrayList<QuestionDTO>();
+        Integer offset = (page-1)*size;
+        Integer countNum = questionMapper.count2UserId(userID);
+
+        List<Question> list = questionMapper.list2UserId(userID,offset,size);
+        if(list.size()>0)
+            for (Question question:list) {
+                QuestionDTO questionDTO = new QuestionDTO();
+                BeanUtils.copyProperties(question,questionDTO);
+                Integer creater = question.getCreater();
+                User id2UserInfo = userMapper.find2IdUserInfo(creater);
+                questionDTO.setUser(id2UserInfo);
+                QuestionList.add(questionDTO);
+            }
+        pageQuestionDTO.setQuestion(QuestionList);
+        pageQuestionDTO.setPageData(page,size,countNum);
+        return pageQuestionDTO;
+    }
+
+    public QuestionDTO findQuestionById(Integer id) {
+        Question question = questionMapper.findQuestionById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question,questionDTO);
+        Integer creater = question.getCreater();
+        User id2UserInfo = userMapper.find2IdUserInfo(creater);
+        questionDTO.setUser(id2UserInfo);
+        return questionDTO;
+    }
+
+    public void insertQuestion(Question question) {
+        questionMapper.insertQuestion(question);
+    }
+
+    public void insertOrUpdateQuestion(Question question) {
+        Integer id = question.getId();
+        if(id == null){
+            questionMapper.insertQuestion(question);
+        }else{
+            questionMapper.updateQuestion(question);
+        }
+
+    }
 }

@@ -22,6 +22,7 @@ public class PageQuestionDTO {
         private Integer currPage;//当前页，高亮显示
         private Integer totalPage;
 
+    //当总页数为0时
     public void setPageData(Integer page, Integer size, Integer countNum) {
         pages = new ArrayList<Integer>();
         Integer endPage = 1;
@@ -30,7 +31,6 @@ public class PageQuestionDTO {
         }else{
             endPage = countNum/size +1;
         }
-
         pages.add(page);
         for(int i=1;i<=3;i++){
             //当前页的前三页
