@@ -1,6 +1,5 @@
 ## 学习spring boot
-    Day 1: 基础+git+bootstrap
-    Day 2：接入外部接口github账号
+    
     
 ## 学习内容记录
 [Spring Boot 功能插件](https://spring.io/guides/)
