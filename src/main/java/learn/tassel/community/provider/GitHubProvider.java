@@ -35,7 +35,7 @@ public class GitHubProvider {
     // 携带access_token 请求返回值。
     public GitHubUser getGitHubUser(String access_token){
 
-        System.out.println(access_token);
+//        System.out.println(access_token);
 
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

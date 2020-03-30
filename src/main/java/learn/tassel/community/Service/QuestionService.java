@@ -2,6 +2,8 @@ package learn.tassel.community.Service;
 
 import learn.tassel.community.Dto.PageQuestionDTO;
 import learn.tassel.community.Dto.QuestionDTO;
+import learn.tassel.community.Exception.CustomizeErrorCode;
+import learn.tassel.community.Exception.CustomizeException;
 import learn.tassel.community.Mapper.QuestionMapper;
 import learn.tassel.community.Mapper.UserMapper;
 import learn.tassel.community.Model.Question;
@@ -32,15 +34,7 @@ public class QuestionService {
 
         Integer countNum = questionMapper.count();
         List<Question> list = questionMapper.list(offset,size);
-        if(list.size()>0)
-            for (Question question:list) {
-                QuestionDTO questionDTO = new QuestionDTO();
-                BeanUtils.copyProperties(question,questionDTO);
-                Integer creater = question.getCreater();
-                User id2UserInfo = userMapper.find2IdUserInfo(creater);
-                questionDTO.setUser(id2UserInfo);
-                QuestionList.add(questionDTO);
-            }
+        QuestionDTOMerge(list,QuestionList);
         pageQuestionDTO.setQuestion(QuestionList);
         pageQuestionDTO.setPageData(page,size,countNum);
         return pageQuestionDTO;
@@ -53,15 +47,7 @@ public class QuestionService {
         Integer countNum = questionMapper.count2UserId(userID);
 
         List<Question> list = questionMapper.list2UserId(userID,offset,size);
-        if(list.size()>0)
-            for (Question question:list) {
-                QuestionDTO questionDTO = new QuestionDTO();
-                BeanUtils.copyProperties(question,questionDTO);
-                Integer creater = question.getCreater();
-                User id2UserInfo = userMapper.find2IdUserInfo(creater);
-                questionDTO.setUser(id2UserInfo);
-                QuestionList.add(questionDTO);
-            }
+        QuestionDTOMerge(list,QuestionList);
         pageQuestionDTO.setQuestion(QuestionList);
         pageQuestionDTO.setPageData(page,size,countNum);
         return pageQuestionDTO;
@@ -69,6 +55,10 @@ public class QuestionService {
 
     public QuestionDTO findQuestionById(Integer id) {
         Question question = questionMapper.findQuestionById(id);
+        //抛出异常
+        if(question ==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         Integer creater = question.getCreater();
@@ -89,5 +79,22 @@ public class QuestionService {
             questionMapper.updateQuestion(question);
         }
 
+    }
+
+    /**
+     * 返回问题列表信息 重构
+     * @param list
+     * @param QuestionList
+     */
+    private void QuestionDTOMerge(List<Question> list,List<QuestionDTO> QuestionList){
+        if(list.size()>0)
+            for (Question question:list) {
+                QuestionDTO questionDTO = new QuestionDTO();
+                BeanUtils.copyProperties(question,questionDTO);
+                Integer creater = question.getCreater();
+                User id2UserInfo = userMapper.find2IdUserInfo(creater);
+                questionDTO.setUser(id2UserInfo);
+                QuestionList.add(questionDTO);
+            }
     }
 }
