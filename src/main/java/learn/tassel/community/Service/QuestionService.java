@@ -11,6 +11,7 @@ import learn.tassel.community.Model.User;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,12 +54,17 @@ public class QuestionService {
         return pageQuestionDTO;
     }
 
-    public QuestionDTO findQuestionById(Integer id) {
+    public QuestionDTO findQuestionById(Long id) {
         Question question = questionMapper.findQuestionById(id);
         //抛出异常
         if(question ==null){
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
+        //累加阅读数
+        questionMapper.incView(id);
+        //在重新查找一遍，更新阅读数据
+        question = questionMapper.findQuestionById(id);
+
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         Integer creater = question.getCreater();
@@ -67,12 +73,14 @@ public class QuestionService {
         return questionDTO;
     }
 
+
+    @Transactional
     public void insertQuestion(Question question) {
         questionMapper.insertQuestion(question);
     }
 
     public void insertOrUpdateQuestion(Question question) {
-        Integer id = question.getId();
+        Long id = question.getId();
         if(id == null){
             questionMapper.insertQuestion(question);
         }else{

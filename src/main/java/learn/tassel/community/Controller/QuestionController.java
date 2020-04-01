@@ -15,7 +15,7 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/question/{id}")
-    public String profile(@PathVariable(name = "id") Integer id,
+    public String profile(@PathVariable(name = "id") Long id,
                           Model model){
         //通过id 获取问题内容
         QuestionDTO questionDTO = questionService.findQuestionById(id);

@@ -109,10 +109,17 @@
     <script src="bootstrap-3.3.7/js/bootstrap.js"></script>
     
     <script>
-        
-        // function longinRegist() {
-        //
-        // }
-        
+        <!--
+
+        -->
+
+        window.onload = function () {
+            var clearLogin = window.localStorage.getItem("clearLogin");
+            if(clearLogin == "yes"){
+                window.close();
+                window.localStorage.removeItem("clearLogin");
+            }
+        }
+
     </script>
 </html>

@@ -24,8 +24,12 @@ public interface QuestionMapper {
     List<Question> list2UserId(@Param("userId") Integer userId, @Param("offset") Integer offset, @Param("size") Integer size);
 
     @Select("select * from question where id = #{id}")
-    Question findQuestionById(@Param("id") Integer id);
+    Question findQuestionById(@Param("id") Long id);
 
     @Update("update question set title=#{title},description=#{description},tag=#{tag},gmt_modifity=#{gmtModifity} where id = #{id}")
     void updateQuestion(Question question);
+
+    @Update("update question set view_count = view_count+1 where id = #{id}")
+    void incView(@Param("id") Long id);
+
 }
