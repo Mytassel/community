@@ -9,3 +9,14 @@
 2020-04-01 18:46:07.819  INFO 4348 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
 2020-04-01 18:46:07.915  INFO 4348 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
 2020-04-01 18:46:07.917  INFO 4348 --- [main] l.tassel.community.CommunityApplication  : Started CommunityApplication in 1.691 seconds (JVM running for 2.694)
+2020-04-01 19:04:10.737  INFO 12392 --- [main] l.tassel.community.CommunityApplication  : Starting CommunityApplication on ningzhiang with PID 12392 (E:\IDEA_WorkSpace\community\target\classes started by zhiang.ning in E:\IDEA_WorkSpace\community)
+2020-04-01 19:04:10.739  INFO 12392 --- [main] l.tassel.community.CommunityApplication  : No active profile set, falling back to default profiles: default
+2020-04-01 19:04:11.412  INFO 12392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2020-04-01 19:04:11.418  INFO 12392 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-04-01 19:04:11.418  INFO 12392 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.31]
+2020-04-01 19:04:11.498  INFO 12392 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-04-01 19:04:11.498  INFO 12392 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 728 ms
+2020-04-01 19:04:11.754  INFO 12392 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-04-01 19:04:11.795  INFO 12392 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2020-04-01 19:04:11.889  INFO 12392 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2020-04-01 19:04:11.891  INFO 12392 --- [main] l.tassel.community.CommunityApplication  : Started CommunityApplication in 1.421 seconds (JVM running for 2.402)
