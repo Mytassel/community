@@ -96,11 +96,11 @@
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object" th:src="${question.user.avaterUrl}">
+                            <img class="media-object" th:src="${session.user.avaterUrl}">
                         </a>
                     </div>
                     <div class="media-body">
-                        <h3 class="media-heading" th:text="${question.user.name}"></h3>
+                        <h3 class="media-heading" th:text="${session.user.name}"></h3>
                     </div>
                 </div>
             </div>
